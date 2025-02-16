@@ -39,7 +39,7 @@ const CustomGradient: React.FC<CustomGradientProps> = ({
     height: 120,
     top: position === 'top' ? 0 : undefined,
     bottom: position === 'bottom' ? 0 : undefined,
-    zIndex: 999,
+    zIndex: position === 'top'? 0: 999,
   };
 
   return (

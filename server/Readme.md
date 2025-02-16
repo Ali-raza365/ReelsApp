@@ -17,7 +17,7 @@
 </div>
 
 
-Welcome to the Reelzzz Server repository! This Node.js application serves as the backend for the Reelzzz project. Below, you'll find instructions on how to set up the development environment and configure necessary variables using the `.env` file.
+Welcome to the ReelVibe Server repository! This Node.js application serves as the backend for the ReelVibe project. Below, you'll find instructions on how to set up the development environment and configure necessary variables using the `.env` file.
 
 
 ## Installation

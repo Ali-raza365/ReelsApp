@@ -70,7 +70,7 @@ const VideoItem: FC<VideoItemProps> = ({item, isVisible, preload}) => {
 
   const handleShareReel = () => {
     const reelUrl = `${
-      Platform.OS == 'android' ? 'http://localhost:3000' : 'reelzzz:/'
+      Platform.OS == 'android' ? 'http://localhost:3000' : 'reelvibe:/'
     }/share/reel/${item._id}`;
     const message = `Hey, Checkout this reel: ${reelUrl}`;
     Share.share({

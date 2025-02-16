@@ -95,7 +95,7 @@ const ReelListTab: React.FC<{
 
   return (
     <Tabs.FlatList
-      data={data}
+      data={[...data,...data,...data,...data,...data,...data]}
       renderItem={renderItem}
       keyExtractor={(item, index) => index.toString()}
       numColumns={3}

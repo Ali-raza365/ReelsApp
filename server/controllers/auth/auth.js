@@ -39,17 +39,10 @@ const checkUsernameAvailability = async (req, res) => {
 };
 
 const signUpWithOauth = async (req, res) => {
-  const {
-    provider,
-    id_token,
-    name,
-    userImage,
-    username,
-    bio,
-    email,
-    password,
-  } = req.body;
-
+  const { provider, id_token, name, userImage, username, bio, email } =
+    req.body;
+    
+    console.log({provider, id_token, name, userImage, username, bio, email})
   if (
     !provider ||
     !id_token ||
@@ -62,11 +55,6 @@ const signUpWithOauth = async (req, res) => {
   ) {
     throw new BadRequestError("Invalid body request");
   }
-
-  if (provider === "email" && !password) {
-    throw new BadRequestError("Password is required for email sign-up");
-  }
-
   try {
     let verifiedEmail;
 
@@ -95,9 +83,7 @@ const signUpWithOauth = async (req, res) => {
     }
 
     let user = await User.findOne({ email: verifiedEmail });
-    if (provider === "email" && user) {
-      throw new UnauthenticatedError("User already exist");
-    }
+
     if (!user) {
       user = new User({
         email: verifiedEmail,
@@ -105,14 +91,65 @@ const signUpWithOauth = async (req, res) => {
         name,
         userImage,
         bio,
+        IsProfileCompleted: true,
       });
-      if (provider === "email") {
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
-      }
       await user.save();
       const reward = new Reward({ user: user._id });
       await reward.save();
+    }else{
+      user.username=username
+      user.name=name
+      user.userImage=userImage
+      user.bio=bio
+      user.IsProfileCompleted=true
+      await user.save();
+    }
+
+    const accessToken = user.createAccessToken();
+    const refreshToken = user.createRefreshToken();
+
+    res.status(StatusCodes.OK).json({
+      user: {
+        name: user.name,
+        id: user.id,
+        username: user.username,
+        userImage: user.userImage,
+        email: user.email,
+        bio: user.bio,
+        IsProfileCompleted: user?.IsProfileCompleted,
+      },
+      tokens: { access_token: accessToken, refresh_token: refreshToken },
+    });
+  } catch (error) {
+    console.error(error);
+    throw new UnauthenticatedError("Invalid Token or expired");
+  }
+};
+
+const signUPWithEmail = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw new BadRequestError(
+      "Email and password are required for email login"
+    );
+  }
+
+  try {
+    let user = await User.findOne({ email: email });
+    if (user) {
+      throw new NotFoundError("User Already Exist");
+    }
+
+    if (!user) {
+      const salt = await bcrypt.genSalt(10);
+      let hashpassword = await bcrypt.hash(password, salt);
+      user = new User({
+        email: email,
+        password: hashpassword,
+        IsProfileCompleted: false,
+      });
+      await user.save();
     }
 
     const accessToken = user.createAccessToken();
@@ -130,6 +167,7 @@ const signUpWithOauth = async (req, res) => {
       tokens: { access_token: accessToken, refresh_token: refreshToken },
     });
   } catch (error) {
+    console.log(error);
     console.error(error);
     throw new UnauthenticatedError("Invalid Token or expired");
   }
@@ -183,7 +221,9 @@ const signInWithOauth = async (req, res) => {
     if (provider === "email") {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        throw new UnauthenticatedError("Invalid email or password");
+        return res
+          .status(StatusCodes.UNAUTHORIZED)
+          .json({ message: "Invalid email or password" });
       }
     }
 
@@ -196,6 +236,7 @@ const signInWithOauth = async (req, res) => {
 
     res.status(StatusCodes.OK).json({
       user: {
+        IsProfileCompleted: user?.IsProfileCompleted,
         name: user.name,
         id: user.id,
         username: user.username,
@@ -209,6 +250,7 @@ const signInWithOauth = async (req, res) => {
       tokens: { access_token: accessToken, refresh_token: refreshToken },
     });
   } catch (error) {
+    console.log(error);
     console.error(error);
     throw new UnauthenticatedError("Invalid Token or expired");
   }
@@ -243,6 +285,7 @@ const refreshToken = async (req, res) => {
 module.exports = {
   signInWithOauth,
   signUpWithOauth,
+  signUPWithEmail,
   refreshToken,
   checkUsernameAvailability,
 };

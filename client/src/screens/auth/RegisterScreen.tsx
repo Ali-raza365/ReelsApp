@@ -165,8 +165,8 @@ const RegisterScreen: FC = () => {
       bio,
       userImage,
       email: item?.email,
-      provider: item?.provider,
-      id_token: item?.id_token,
+      provider: item?.provider ||'email',
+      id_token: item?.id_token|| "email",
       username,
     };
     await dispatch(register(registerData));

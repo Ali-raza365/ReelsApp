@@ -1,3 +1,4 @@
+import EmailLoginScreen from '../screens/auth/EmailLoginScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
 import SplashScreen from '../screens/auth/SplashScreen';
@@ -9,6 +10,7 @@ import PickReelScreen from '../screens/reel/PickReelScreen';
 import ReelScrollScreen from '../screens/reel/ReelScrollScreen';
 import UploadReelScreen from '../screens/reel/UploadReelScreen';
 import BottomTab from './BottomTab';
+import EmailSignUpScreen from '../screens/auth/EmailSignUpScreen';
 
 export const authStack = [
   {
@@ -22,6 +24,14 @@ export const authStack = [
   {
     name: 'SplashScreen',
     component: SplashScreen,
+  },
+  {
+    name: 'EmailLoginScreen',
+    component: EmailLoginScreen,
+  },
+  {
+    name: 'SignUpScreen',
+    component: EmailSignUpScreen,
   },
 ];
 

@@ -40,10 +40,10 @@ export const extractTypeAndId = (url: string): {type: string; id: string} => {
 
   // Regex patterns to match each type of URL
   const reelPattern1 = /^http:\/\/localhost:3000\/share\/reel\/([a-f\d]{24})$/;
-  const reelPattern2 = /^reelzzz:\/\/share\/reel\/([a-f\d]{24})$/;
+  const reelPattern2 = /^reelvibe:\/\/share\/reel\/([a-f\d]{24})$/;
   const userPattern1 =
     /^http:\/\/localhost:3000\/share\/user\/([a-zA-Z0-9_]+)$/;
-  const userPattern2 = /^reelzzz:\/\/share\/user\/([a-zA-Z0-9_]+)$/;
+  const userPattern2 = /^reelvibe:\/\/share\/user\/([a-zA-Z0-9_]+)$/;
 
   if (reelPattern1.test(url)) {
     type = 'reel';

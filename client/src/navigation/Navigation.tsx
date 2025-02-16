@@ -11,7 +11,7 @@ const config = {
 };
 
 const linking = {
-  prefixes: ['reelzzz://', 'https://reelzzz.com', 'http://localhost:3000'],
+  prefixes: ['reelvibe://', 'https://reelvibe.com', 'http://localhost:3000'],
   config,
 };
 

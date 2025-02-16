@@ -12,11 +12,15 @@ import {goBack} from '../../utils/NavigationUtil';
 interface uriData {
   thumb_uri: string;
   file_uri: string;
+  width?:string,
+  height?:string
 }
 
 const UploadReelScreen: React.FC = () => {
   const data = useRoute();
   const item = data?.params as uriData;
+
+  console.log(item)
   const [caption, setCaption] = useState<string>('');
   const {startUpload} = useUpload();
 
@@ -41,7 +45,7 @@ const UploadReelScreen: React.FC = () => {
           iconName="upload"
           onPress={() => {
             goBack();
-            startUpload(item?.thumb_uri, item?.file_uri, caption);
+            startUpload(item?.thumb_uri, item?.file_uri, caption,item.width,item.height);
           }}
         />
       </ScrollView>

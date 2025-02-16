@@ -7,7 +7,8 @@ const Like = require("../../models/Like");
 const Comment = require("../../models/Comment");
 
 const createReel = async (req, res) => {
-  const { videoUri, thumbUri, caption } = req.body;
+  const { videoUri, thumbUri, caption ,width,height } = req.body;
+  console.log({ videoUri, thumbUri, caption ,width,height } )
   if (!videoUri || !thumbUri || !caption) {
     throw new BadRequestError("Invalid Body");
   }
@@ -20,7 +21,7 @@ const createReel = async (req, res) => {
     throw new NotFoundError("User not found");
   }
   try {
-    const newReel = new Reel({ user: userId, videoUri, caption, thumbUri });
+    const newReel = new Reel({ user: userId, videoUri, caption, thumbUri ,width,height});
     await newReel.save();
 
     res.status(StatusCodes.CREATED).json(newReel);

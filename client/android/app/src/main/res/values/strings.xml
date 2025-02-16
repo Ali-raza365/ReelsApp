@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Reelzzz</string>
+    <string name="app_name">ReelVibe</string>
      <!-- Facebook Config Here -->
-    <string name="facebook_app_id">YOUR_FB_APP_ID</string>
-    <string name="fb_login_protocol_scheme">fbYOUR_FB_APP_ID</string>
-    <string name="facebook_client_token">YOUR_FB_CLIENT_TOKEN</string>
+    <string name="facebook_app_id">594321690245274</string>
+    <string name="fb_login_protocol_scheme">123beeda935d2c50d20dfaecdaa08ebb</string>
+    <string name="facebook_client_token">91ee8b7c73d2a1252e70944fc4d0f8c9</string>
       <!-- Facebook Config Here -->
 </resources>

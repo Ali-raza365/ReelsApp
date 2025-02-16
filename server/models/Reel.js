@@ -9,6 +9,8 @@ const ReelSchema = new mongoose.Schema(
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     viewCount: { type: Number, default: 0 },
+    width: { type: Number},
+    height: { type: Number },
   },
   { timestamps: true }
 );

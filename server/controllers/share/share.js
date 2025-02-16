@@ -18,10 +18,10 @@ const share = async (req, res) => {
       if (!user) {
         return res.status(404).send("User not found");
       }
-      title = `Check out ${user.username}'s profile on Reelzzz`;
+      title = `Check out ${user.username}'s profile on ReelVibe`;
       description = user.bio
         ? user.bio
-        : `${user.username} shares amazing reels on Reelzzz.`;
+        : `${user.username} shares amazing reels on ReelVibe.`;
       imageUrl = user.userImage
         ? user.userImage
         : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
@@ -31,10 +31,10 @@ const share = async (req, res) => {
       if (!reel) {
         return res.status(404).send("Reel not found");
       }
-      title = `Watch this amazing reel by ${reel.user.username} on Reelzzz`;
+      title = `Watch this amazing reel by ${reel.user.username} on ReelVibe`;
       description = reel.caption
         ? reel.caption
-        : `Check out this cool reel on Reelzzz.`;
+        : `Check out this cool reel on ReelVibe.`;
       imageUrl = reel.thumbUri
         ? reel.thumbUri
         : "https://static-00.iconduck.com/assets.00/video-x-generic-icon-512x388-1u3h7equ.png";

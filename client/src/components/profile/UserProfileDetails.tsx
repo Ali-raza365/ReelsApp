@@ -56,7 +56,7 @@ const UserProfileDetails: React.FC<{
 
   const handleShareProfile = () => {
     const profileUrl = `${
-      Platform.OS == 'android' ? 'http://localhost:3000' : 'reelzzz:/'
+      Platform.OS == 'android' ? 'https://reels-server-5wvy.onrender.com' : 'reelvibe:/'
     }/share/user/${user.username}`;
     const message = `Hey, Checkout this profile: ${profileUrl}`;
     Share.share({

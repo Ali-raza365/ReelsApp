@@ -31,6 +31,7 @@ const getProfile = async (req, res) => {
         userImage: user.userImage,
         email: user.email,
         bio: user.bio,
+        IsProfileCompleted: user?.IsProfileCompleted,
         followersCount,
         followingCount,
         reelsCount,

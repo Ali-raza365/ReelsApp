@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema(
     },
     username: {
       type: String,
-      required: true,
+      required: false,
       match: [/^[a-zA-Z0-9_]{3,30}$/, "Please provide a valid username"],
       unique: true,
     },
@@ -29,8 +29,12 @@ const UserSchema = new mongoose.Schema(
     bio: {
       type: String,
     },
-    password:{
-      type:String,
+    IsProfileCompleted: {
+      type: Boolean,
+      default: false,
+    },
+    password: {
+      type: String,
     },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],

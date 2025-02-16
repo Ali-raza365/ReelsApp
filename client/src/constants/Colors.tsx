@@ -1,5 +1,6 @@
 export enum Colors {
   theme = '#a9c2eb',
+  secondary = '#7e2a0c',
   background = '#020B17',
   card = '#162640',
   text = '#fff',

@@ -39,7 +39,7 @@ const FeedReelScrollScreen: FC = () => {
   const dispatch = useAppDispatch();
 
   const routeParams = route?.params as RouteProp;
-
+console.log(routeParams)
   const [loading, setLoading] = useState(false);
   const [offset, setOffset] = useState(0);
   const [data, setData] = useState<any[]>([]);

@@ -29,7 +29,7 @@ const UserDetails: React.FC<UserDetailsProps> = React.memo(({user}) => {
   const handleFollow = async () => {
     await dispatch(toggleFollow(user._id));
   };
-
+// console.log({user})
   return (
     <View>
       <TouchableOpacity

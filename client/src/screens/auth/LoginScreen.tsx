@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import CustomSafeAreaView from '../../components/global/CustomSafeAreaView';
 import Lottie from 'lottie-react-native';
 import Animation from '../../assets/animations/login.json';
@@ -13,7 +13,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import GoogleIcon from '../../assets/icons/google.png';
 import {useAppDispatch} from '../../redux/reduxHook';
 import {signInWithFacebook, signInWithGoogle} from '../../redux/SocialLogin';
-const LoginScreen:FC = () => {
+import {navigate, resetAndNavigate} from '../../utils/NavigationUtil';
+const LoginScreen: FC = () => {
   const dispatch = useAppDispatch();
 
   return (
@@ -30,7 +31,7 @@ const LoginScreen:FC = () => {
           end={{x: 1, y: 0.5}}
         />
         <CustomText variant="h2" fontFamily={FONTS.Reelz}>
-          Reelzzz
+          ReelVibe
         </CustomText>
         <LinearGradient
           colors={[`rgba(0,0,0,0)`, Colors.text, `rgba(0,0,0,0)`]}
@@ -43,6 +44,14 @@ const LoginScreen:FC = () => {
       <CustomText variant="h6" fontFamily={FONTS.Medium} style={styles.tagline}>
         Rewarding Every Moment for Creators and Viewers.
       </CustomText>
+
+      <SocialButtonHorizontal
+        icon={<Icon name="mail" size={20} color={Colors.black} />}
+        onPress={async () => navigate('EmailLoginScreen')}
+        text="Continue with Email"
+        textColor="#000"
+        backgroundColor={Colors.white}
+      />
 
       <SocialButtonHorizontal
         icon={<Icon name="logo-facebook" size={20} color={Colors.text} />}
@@ -62,7 +71,7 @@ const LoginScreen:FC = () => {
 
       <TouchableOpacity style={styles.footerText}>
         <CustomText variant="h8" fontFamily={FONTS.Medium}>
-          Designed and developed by - Ritik Prasad
+          Designed and developed by - Ali
         </CustomText>
       </TouchableOpacity>
     </CustomSafeAreaView>

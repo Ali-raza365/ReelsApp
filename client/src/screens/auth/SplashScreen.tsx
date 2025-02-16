@@ -47,7 +47,7 @@ const SplashScreen: FC = () => {
           return false;
         }
       }
-      resetAndNavigate('BottomTab');
+      resetAndNavigate('RegisterScreen');
       return true;
     }
     resetAndNavigate('LoginScreen');
@@ -142,7 +142,7 @@ const SplashScreen: FC = () => {
           }}
         />
         <CustomText variant="h3" fontFamily={FONTS.Reelz}>
-          Reelzzz
+          ReelVibe
         </CustomText>
       </View>
     </View>

@@ -379,6 +379,8 @@ const getHomeFeed = async (req, res) => {
       thumbUri: reel.thumbUri,
       caption: reel.caption,
       createdAt: reel.createdAt,
+      width:reel?.width,
+      height:reel?.height,
       user: {
         _id: reel.user.id,
         username: reel.user.username,

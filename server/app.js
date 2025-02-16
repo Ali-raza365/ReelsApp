@@ -6,9 +6,10 @@ const connectDB = require("./config/connect");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const authMiddleware = require("./middleware/authentication");
-
+const morgan = require("morgan")
 const app = express();
 app.use(express.json());
+app.use(morgan('dev'));
 
 // Routers
 const authRouter = require("./routes/auth");

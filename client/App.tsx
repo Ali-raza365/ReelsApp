@@ -8,15 +8,17 @@ import {Platform, StatusBar} from 'react-native';
 import {Provider} from 'react-redux';
 import {persistor, store} from './src/redux/store';
 import {PersistGate} from 'redux-persist/integration/react';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from './src/utils/CustomToast';
 
-// GoogleSignin.configure({
-//   webClientId:
-//     'YOUR_GOOGLE_WEB_CLIENT_ID',
-//   forceCodeForRefreshToken: true,
-//   offlineAccess: false,
-//   iosClientId:
-//     'YOUR_GOOGLE_IOS_CLIENT_ID',
-// });
+GoogleSignin.configure({
+  webClientId:
+    '395225624817-0hr8ovn46ojjaa29da4g0v59i3l95jm4.apps.googleusercontent.com',
+  forceCodeForRefreshToken: true,
+  offlineAccess: false,
+  // iosClientId:
+  //   'YOUR_GOOGLE_IOS_CLIENT_ID',
+});
 
 const App = () => {
   return (
@@ -30,7 +32,9 @@ const App = () => {
           <Navigation />
         </PersistGate>
       </Provider>
+    <Toast config={toastConfig} position='top'/>
     </GestureHandlerRootView>
+
   );
 };
 

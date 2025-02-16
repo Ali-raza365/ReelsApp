@@ -1,4 +1,4 @@
-package com.reelzzz_app
+package com.app.reelvibe
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

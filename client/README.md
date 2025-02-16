@@ -21,7 +21,7 @@
 </div>
 
 
-Welcome to the Reelzzz App repository! This React Native application for the Reelzzz project. Below, you'll find instructions on how to set up the development environment and configure necessary variables 
+Welcome to the ReelVibe App repository! This React Native application for the ReelVibe project. Below, you'll find instructions on how to set up the development environment and configure necessary variables 
 
 <br />
 
@@ -31,7 +31,7 @@ Welcome to the Reelzzz App repository! This React Native application for the Ree
 
 ### Features
 
-Reelzzz App is a powerful, High-performance Social Media app built using React Native. It features:
+ReelVibe App is a powerful, High-performance Social Media app built using React Native. It features:
 
 * 📸 Photo and Video Record Upload
 * 🗿 Login with Google / Facebook React Native Node JS Mongoose

@@ -17,7 +17,6 @@ const PickerReelButton: FC = () => {
       includeExtra: true,
     })
       .then(res => {
-        console.log(res);
 
         createThumbnail({
           url: res.assets![0].uri || '',
@@ -28,6 +27,8 @@ const PickerReelButton: FC = () => {
               navigate('UploadReelScreen', {
                 thumb_uri: response.path,
                 file_uri: res.assets![0].uri,
+                height:res.assets![0].height,
+                width:res.assets![0].width,
               });
             }
           })

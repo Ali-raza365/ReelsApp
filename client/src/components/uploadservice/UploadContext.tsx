@@ -27,7 +27,7 @@ interface UploadContextType {
   loadingMessage: string | null;
   uploading: boolean;
   uploadProgress: number;
-  startUpload: (thumb_uri: string, file_uri: string, caption: string) => void;
+  startUpload: (thumb_uri: string, file_uri: string, caption: string,width?:string,height?:string) => void;
   uploadAnimation: Animated.Value;
   showUpload: (value: boolean) => void;
   thumbnailUri: string;
@@ -54,10 +54,13 @@ export const UploadProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [thumbnailUri, setThumbnailUri] = useState<string>('');
   const [uploading, setUploading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+
   const startUpload = async (
     thumb_uri: string,
     file_uri: string,
     caption: string,
+    width?: string,
+    height?: string,
   ) => {
     try {
       Animated.timing(uploadAnimation, {
@@ -90,6 +93,8 @@ export const UploadProvider: React.FC<{children: ReactNode}> = ({children}) => {
         videoUri: videoResponse,
         thumbUri: thumbnailResponse,
         caption: caption,
+        width,
+        height
       };
       await dispatch(createReel(data));
       setUploading(false);

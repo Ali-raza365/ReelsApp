@@ -39,6 +39,7 @@ const useGallery = ({pageSize = 30}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingNextPage, setIsLoadingNextPage] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
+  const [videodimenstion, setvideodimenstion] = useState<any>({});
 
   const loadNextPagePictures = async () => {
     if (!hasNextPage) return;
@@ -56,7 +57,8 @@ const useGallery = ({pageSize = 30}) => {
           'imageSize',
         ],
       });
-
+      console.log(videoData)
+      // setvideodimenstion({width:videoData})
       const videoExtracted = videoData.edges.map(edge => ({
         uri: edge.node.image.uri,
         playableDuration: edge.node.image.playableDuration,
@@ -64,6 +66,7 @@ const useGallery = ({pageSize = 30}) => {
         fileName: edge.node.image.filename,
         extension: edge.node.image.extension,
       }));
+      console.log({videoExtracted})
 
       setVideos(prev => [...prev, ...videoExtracted]);
       setNextCursor(videoData.page_info.end_cursor);
@@ -158,10 +161,12 @@ const PickReelScreen: FC = () => {
         timeStamp: 100,
       })
         .then(response => {
-          console.log(response);
           navigate('UploadReelScreen', {
             thumb_uri: response.path,
             file_uri: uri,
+            height:response.height,
+            width:response.width,
+
           });
         })
         .catch(err => {

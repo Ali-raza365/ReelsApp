@@ -38,6 +38,7 @@ const handleSignInError = (error: any, data: RegisterData) => {
   Alert.alert('We are facing issues, try again later');
 };
 
+
 export const signInWithGoogle = () => async (dispatch: any) => {
   try {
     await GoogleSignin.hasPlayServices();
@@ -53,7 +54,7 @@ export const signInWithGoogle = () => async (dispatch: any) => {
       })
       .catch((err: any) => {
         const errorData = {
-          email: user.email,
+          email: user?.email?.toLowerCase().trim(),
           name: user.name,
           userImage: user.photo,
           provider: 'google',
