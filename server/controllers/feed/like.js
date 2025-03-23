@@ -119,10 +119,12 @@ const likeReel = async (req, res) => {
     const existingLike = await Like.findOne({ user: userId, reel: reel.id });
     if (existingLike) {
       await Like.findByIdAndDelete(existingLike.id);
+      await Reel.findByIdAndUpdate(reelId, { $pull: { likes: userId } });
       res.status(StatusCodes.OK).json({ msg: "Unliked", data: existingLike });
     } else {
       const newLike = new Like({ user: userId, reel: reel.id });
       await newLike.save();
+      await Reel.findByIdAndUpdate(reelId, { $addToSet: { likes: userId } });
       await updateReward(userId, "tokens", 0.1);
       res.status(StatusCodes.OK).json({ msg: "Liked", data: newLike });
     }

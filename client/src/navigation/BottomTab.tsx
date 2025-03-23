@@ -1,13 +1,14 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {FC} from 'react';
-import HomeScreen from '../screens/dashboard/HomeScreen';
-import ProfileScreen from '../screens/dashboard/ProfileScreen';
 import {Image, Platform, TouchableOpacity} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {Colors} from '../constants/Colors';
-import {HomeTabIcon, ProfileTabIcon} from './TabIcon';
+import FollowingReelsScreen from '../screens/dashboard/FollowingReelsScreen';
+import HomeScreen from '../screens/dashboard/HomeScreen';
+import ProfileScreen from '../screens/dashboard/ProfileScreen';
 import {bottomBarStyles} from '../styles/NavigationBarStyles';
 import {navigate} from '../utils/NavigationUtil';
+import {FollowerTabIcon, HomeTabIcon, ProfileTabIcon} from './TabIcon';
 const Tab = createBottomTabNavigator();
 
 const BottomTab: FC = () => {
@@ -35,9 +36,13 @@ const BottomTab: FC = () => {
           if (route.name === 'Profile') {
             return <ProfileTabIcon focused={focused} />;
           }
+          if (route.name === 'FollowingReels') {
+            return <FollowerTabIcon focused={focused} />;
+          }
         },
       })}>
       <Tab.Screen name="Home" component={HomeScreen} />
+      {/* <Tab.Screen name="FollowingReels" component={FollowingReelsScreen} /> */}
       <Tab.Screen
         name="Post"
         component={HomeScreen}

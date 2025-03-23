@@ -11,6 +11,7 @@ import ReelScrollScreen from '../screens/reel/ReelScrollScreen';
 import UploadReelScreen from '../screens/reel/UploadReelScreen';
 import BottomTab from './BottomTab';
 import EmailSignUpScreen from '../screens/auth/EmailSignUpScreen';
+import SearchReelsScreen from '../screens/dashboard/SearchReelsScreen';
 
 export const authStack = [
   {
@@ -67,6 +68,10 @@ export const dashboardStack = [
   {
     name: 'ReedemScreen',
     component: ReedemScreen,
+  },
+  {
+    name: 'SearchReelsScreen',
+    component: SearchReelsScreen,
   },
 ];
 

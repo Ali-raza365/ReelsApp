@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {Colors} from '../../constants/Colors';
 import {FONTS} from '../../constants/Fonts';
+import { navigate } from '../../utils/NavigationUtil';
 
 const HomeScreen: FC = () => {
   const containerRef = useRef<CollapsibleRef>(null);
@@ -32,12 +33,17 @@ const HomeScreen: FC = () => {
   const MyTabs = [
     {
       name: 'For You',
-      component: <GlobalFeed user={user} type="post" />,
+      component: <GlobalFeed user={user} type="forYou" />,
       icon: 'apps-sharp',
     },
     {
       name: 'Popular',
-      component: <GlobalFeed user={user} type="liked" />,
+      component: <GlobalFeed user={user} type="popular" />,
+      icon: 'heart',
+    },
+    {
+      name: 'Following',
+      component: <GlobalFeed user={user} type="following" />,
       icon: 'heart',
     },
   ];
@@ -54,8 +60,8 @@ const HomeScreen: FC = () => {
             {user?.username}
           </CustomText>
         </View>
-        <TouchableOpacity style={styles.searchButton}>
-          <Ionicons name="search" size={24} color="#fff" />
+        <TouchableOpacity style={styles.searchButton} onPress={()=>{navigate('SearchReelsScreen')}}>
+          <Ionicons  name="search" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
     </>
@@ -64,7 +70,6 @@ const HomeScreen: FC = () => {
   return (
     <CustomView>
       <CustomGradient position="top" />
-      {/* <GlobalFeed/> */}
       <Tabs.Container
         lazy
         cancelLazyFadeIn

@@ -1,3 +1,5 @@
+import { screenHeight } from "./Scaling";
+
 export const emojiListData = [
   '😍',
   '🤣',
@@ -55,3 +57,21 @@ export const LotteryData = [
     id: 8,
   },
 ];
+
+export const getReelHeight = (reelHeight: number, ) => {
+  // Define minimum and maximum bounds
+  const minHeight = 180;
+  const maxHeight = screenHeight / 2;
+
+  // Return minHeight if reelHeight is falsy or less than minHeight
+  if (!reelHeight || reelHeight <= minHeight) return minHeight;
+
+  // Calculate the target height (reelHeight / 3)
+  const targetHeight = reelHeight / 3;
+
+  // Return targetHeight if it's between minHeight and maxHeight
+  if (targetHeight <= maxHeight) return targetHeight;
+  
+  // Return maxHeight if targetHeight exceeds it
+  return maxHeight;
+};

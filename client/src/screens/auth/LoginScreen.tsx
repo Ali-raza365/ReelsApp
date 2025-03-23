@@ -53,13 +53,13 @@ const LoginScreen: FC = () => {
         backgroundColor={Colors.white}
       />
 
-      <SocialButtonHorizontal
+      {/* <SocialButtonHorizontal
         icon={<Icon name="logo-facebook" size={20} color={Colors.text} />}
         onPress={async () => await dispatch(signInWithFacebook())}
         text="Continue with Facebook"
         textColor="#fff"
         backgroundColor={Colors.fbColor}
-      />
+      /> */}
 
       <SocialButtonHorizontal
         icon={<Image source={GoogleIcon} style={styles.gimg} />}

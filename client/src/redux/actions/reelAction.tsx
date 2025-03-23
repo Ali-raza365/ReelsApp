@@ -12,10 +12,10 @@ export const createReel = (data: any) => async (dispatch: any) => {
 };
 
 export const fetchFeedReel =
-  (offset: number, limit: number) => async (dispatch: any) => {
+  (offset: number, limit: number, type: string) => async (dispatch: any) => {
     try {
       const res = await appAxios.get(
-        `/feed/home?limit=${limit || 25}&offset=${offset}`,
+        `/feed/home?limit=${limit || 25}&offset=${offset}&type=${type}`,
       );
       return res.data.reels || [];
     } catch (error) {
@@ -23,6 +23,34 @@ export const fetchFeedReel =
       return [];
     }
   };
+
+  
+export const fetchPopularReel =
+(offset: number, limit: number) => async (dispatch: any) => {
+  try {
+    const res = await appAxios.get(
+      `/feed/popular?limit=${limit || 5}&offset=${offset}`,
+    );
+    return res.data.reels || [];
+  } catch (error) {
+    console.log('FETCH REEL ERROR', error);
+    return [];
+  }
+};
+
+export const fetchSearchReel =
+(offset: number, limit: number,text:string) => async (dispatch: any) => {
+  try {
+    const res = await appAxios.get(
+      `/feed/search?limit=${limit || 5}&offset=${offset}&text=${text}`,
+    );
+    return res.data.reels || [];
+  } catch (error) {
+    console.log('FETCH REEL ERROR', error);
+    return [];
+  }
+};
+
 
 interface fetchUserReel {
   userId?: string;

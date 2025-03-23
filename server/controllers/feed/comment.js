@@ -124,7 +124,7 @@ const createComment = async (req, res) => {
       reel: reelId,
     });
     await newComment.save();
-
+    await Reel.findByIdAndUpdate(reelId, { $addToSet: { comments: userId } });
     // Reward the creator of the reel
     await Reward.findOneAndUpdate(
       { user: reel.user },

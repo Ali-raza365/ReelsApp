@@ -9,6 +9,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {Colors} from '../../constants/Colors';
 
+
+const cardMargin = 10; // Margin between cards
+  const totalMargins = cardMargin * 2; // 2 gaps between 3 cards
+  const cardWidth = (screenWidth - totalMargins - 20) / 3; // 20 for container padding
+
 interface ProfileReelCardProps {
   style?: ViewStyle;
   loading: boolean;
@@ -50,7 +55,7 @@ const ProfileReelCard: FC<ProfileReelCardProps> = ({
 
 const styles = StyleSheet.create({
   img: {
-    width: screenWidth * 0.28,
+    width: screenWidth * 0.31,
     height: screenHeight * 0.25,
     justifyContent: 'center',
     alignSelf: 'center',
@@ -65,12 +70,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    width: screenWidth * 0.28,
+    width: screenWidth * 0.31,
     height: screenHeight * 0.25,
     backgroundColor: 'rgba(0,0,0,0.8)',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
+    margin:4,
     borderRadius: 10,
     overflow: 'hidden',
   },

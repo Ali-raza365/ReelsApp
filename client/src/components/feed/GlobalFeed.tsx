@@ -8,7 +8,12 @@ import {
 import ProfileReelCard from '../feed/ProfileReelCard';
 import {Tabs} from 'react-native-collapsible-tab-view';
 import {useAppDispatch} from '../../redux/reduxHook';
-import {fetchReel} from '../../redux/actions/reelAction';
+import {
+  fetchFeedReel,
+  fetchPopularReel,
+  fetchReel,
+  fetchSearchReel,
+} from '../../redux/actions/reelAction';
 import CustomText from '../global/CustomText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {RFValue} from 'react-native-responsive-fontsize';
@@ -17,11 +22,13 @@ import {FONTS} from '../../constants/Fonts';
 import {navigate} from '../../utils/NavigationUtil';
 import {screenHeight, screenWidth} from '../../utils/Scaling';
 import GlobalFeedCard from './GlobalFeedCard';
+import {getReelHeight} from '../../utils/staticData';
 
-const ReelListTab: React.FC<{
+const GlobalFeed: React.FC<{
   user?: ProfileUser | undefined | User;
-  type?: 'post' | 'liked' | 'watched';
-}> = ({user, type}) => {
+  query?: string | undefined | null;
+  type?: 'forYou' | 'popular' | 'following' | 'Search';
+}> = ({user, type, query}) => {
   const [loading, setLoading] = useState(true);
   const [offsetLoading, setOffsetLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -39,7 +46,7 @@ const ReelListTab: React.FC<{
           });
         }}
         style={{
-          height: item?.height/3,
+          height: getReelHeight(item?.height),
         }}
         item={item}
         loading={loading}
@@ -71,12 +78,14 @@ const ReelListTab: React.FC<{
       offset: scrollOffset,
     };
     let newData: any[] = [];
-    if (type == 'post') {
-      newData = await dispatch(fetchReel(reelData, 'reel'));
-    } else if (type == 'liked') {
-      newData = await dispatch(fetchReel(reelData, 'likedreel'));
-    } else {
-      newData = await dispatch(fetchReel(reelData, 'reel'));
+    if (type == 'forYou') {
+      newData = await dispatch(fetchFeedReel(offset, 5, type));
+    } else if (type == 'popular') {
+      newData = await dispatch(fetchPopularReel(offset, 5));
+    } else if (type == 'following') {
+      newData = await dispatch(fetchFeedReel(offset, 5, type));
+    } else if (type === 'Search' && query) {
+      newData = await dispatch(fetchSearchReel(offset, 5, query));
     }
     if (isRefresh) {
       setData([...newData]);
@@ -88,31 +97,38 @@ const ReelListTab: React.FC<{
     if (newData.length < 5) {
       setHasMore(false);
     }
-
     setLoading(false);
     setOffsetLoading(false);
     setRefreshing(false);
   };
+
   useEffect(() => {
     fetchReels(0, false);
   }, []);
 
+  useEffect(() => {
+    fetchReels(0, false);
+    console.log("first")
+  }, [query]);
+
   return (
     <View style={{width: screenWidth, height: screenHeight}}>
       <Tabs.MasonryFlashList
-        data={[...data]}
+        data={data}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         numColumns={2}
         onEndReached={() => {
+          console.log({hasMore});
           if (hasMore) {
             fetchReels(offset, false);
           }
         }}
         estimatedItemSize={200}
+        contentContainerStyle={styles.flatlistContainer}
         removeClippedSubviews
         // initialNumToRender={2}
-        onEndReachedThreshold={0.1}
+        // onEndReachedThreshold={0.1}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -152,7 +168,7 @@ const ReelListTab: React.FC<{
                 color={Colors.white}
               />
               <CustomText fontFamily={FONTS.Medium} variant="h6">
-                No {type} Reels here!
+                No Reels here!
               </CustomText>
             </View>
           );
@@ -166,7 +182,7 @@ const styles = StyleSheet.create({
   flatlistContainer: {
     paddingVertical: 20,
     // alignItems: 'flex-start',
-    // paddingBottom: 80,
+    paddingBottom: 180,
   },
   emptyContainer: {
     justifyContent: 'center',
@@ -176,4 +192,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReelListTab;
+export default GlobalFeed;

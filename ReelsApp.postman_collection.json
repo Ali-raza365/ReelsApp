@@ -1,0 +1,578 @@
+{
+  "info": {
+    "name": "ReelsApp API",
+    "_postman_id": "unique-id",
+    "description": "Postman collection for ReelsApp API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Replies",
+      "item": [
+        {
+          "name": "Create Reply",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"string\",\n  \"userId\": \"string\",\n  \"postId\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{Base_Url}/replies",
+              "host": ["{{Base_Url}}"],
+              "path": ["replies"]
+            }
+          }
+        },
+        {
+          "name": "Delete Reply",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/replies/:replyId",
+              "host": ["{{Base_Url}}"],
+              "path": ["replies", ":replyId"]
+            }
+          }
+        },
+        {
+          "name": "Get Paginated Replies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/replies",
+              "host": ["{{Base_Url}}"],
+              "path": ["replies"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/users/profile",
+              "host": ["{{Base_Url}}"],
+              "path": ["users", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"string\",\n  \"bio\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{Base_Url}/users/profile",
+              "host": ["{{Base_Url}}"],
+              "path": ["users", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Toggle Following",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/users/follow/:userId",
+              "host": ["{{Base_Url}}"],
+              "path": ["users", "follow", ":userId"]
+            }
+          }
+        },
+        {
+          "name": "View User By Handle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/users/profile/:username",
+              "host": ["{{Base_Url}}"],
+              "path": ["users", "profile", ":username"]
+            }
+          }
+        },
+        {
+          "name": "Get Followers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/users/followers/:userId",
+              "host": ["{{Base_Url}}"],
+              "path": ["users", "followers", ":userId"]
+            }
+          }
+        },
+        {
+          "name": "Get Following",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/users/following/:userId",
+              "host": ["{{Base_Url}}"],
+              "path": ["users", "following", ":userId"]
+            }
+          }
+        },
+        {
+          "name": "Get Users By Search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/users/search",
+              "host": ["{{Base_Url}}"],
+              "path": ["users", "search"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Share",
+      "item": [
+        {
+          "name": "Share",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/share/:type/:id",
+              "host": ["{{Base_Url}}"],
+              "path": ["share", ":type", ":id"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rewards",
+      "item": [
+        {
+          "name": "Redeem Tokens",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tokens\": \"number\"\n}"
+            },
+            "url": {
+              "raw": "{Base_Url}/rewards/redeem",
+              "host": ["{{Base_Url}}"],
+              "path": ["rewards", "redeem"]
+            }
+          }
+        },
+        {
+          "name": "Withdraw Rupees",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"number\"\n}"
+            },
+            "url": {
+              "raw": "{Base_Url}/rewards/withdraw",
+              "host": ["{{Base_Url}}"],
+              "path": ["rewards", "withdraw"]
+            }
+          }
+        },
+        {
+          "name": "Get Rewards",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/rewards",
+              "host": ["{{Base_Url}}"],
+              "path": ["rewards"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reels",
+      "item": [
+        {
+          "name": "Create Reel",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"string\",\n  \"userId\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{Base_Url}/reels",
+              "host": ["{{Base_Url}}"],
+              "path": ["reels"]
+            }
+          }
+        },
+        {
+          "name": "Delete Reel",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/reels/:reelId",
+              "host": ["{{Base_Url}}"],
+              "path": ["reels", ":reelId"]
+            }
+          }
+        },
+        {
+          "name": "Update Reel Caption",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"caption\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{Base_Url}/reels/:reelId/caption",
+              "host": ["{{Base_Url}}"],
+              "path": ["reels", ":reelId", "caption"]
+            }
+          }
+        },
+        {
+          "name": "Get Reel By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/reels/:reelId",
+              "host": ["{{Base_Url}}"],
+              "path": ["reels", ":reelId"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Likes",
+      "item": [
+        {
+          "name": "Like Comment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/likes/comment/:commentId",
+              "host": ["{{Base_Url}}"],
+              "path": ["likes", "comment", ":commentId"]
+            }
+          }
+        },
+        {
+          "name": "Like Reply",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/likes/reply/:replyId",
+              "host": ["{{Base_Url}}"],
+              "path": ["likes", "reply", ":replyId"]
+            }
+          }
+        },
+        {
+          "name": "Like Reel",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/likes/reel/:reelId",
+              "host": ["{{Base_Url}}"],
+              "path": ["likes", "reel", ":reelId"]
+            }
+          }
+        },
+        {
+          "name": "List Likes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/likes",
+              "host": ["{{Base_Url}}"],
+              "path": ["likes"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Files",
+      "item": [
+        {
+          "name": "Upload Media",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{Base_Url}/files/upload",
+              "host": ["{{Base_Url}}"],
+              "path": ["files", "upload"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Feed",
+      "item": [
+        {
+          "name": "Get Liked Videos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/feed/likedreel/:userId",
+              "host": ["{{Base_Url}}"],
+              "path": ["feed", "likedreel", ":userId"]
+            }
+          }
+        },
+        {
+          "name": "Get All History Reels",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/feed/watchedreel/:userId",
+              "host": ["{{Base_Url}}"],
+              "path": ["feed", "watchedreel", ":userId"]
+            }
+          }
+        },
+        {
+          "name": "Mark Reels Watched",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reelIds\": [\"string\"]\n}"
+            },
+            "url": {
+              "raw": "{Base_Url}/feed/markwatched",
+              "host": ["{{Base_Url}}"],
+              "path": ["feed", "markwatched"]
+            }
+          }
+        },
+        {
+          "name": "Get Home Feed",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/feed/home",
+              "host": ["{{Base_Url}}"],
+              "path": ["feed", "home"]
+            }
+          }
+        },
+        {
+          "name": "Get Reel Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/feed/reel/:userId",
+              "host": ["{{Base_Url}}"],
+              "path": ["feed", "reel", ":userId"]
+            }
+          }
+        },
+        {
+          "name": "Get Reels By Search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/feed/search",
+              "host": ["{{Base_Url}}"],
+              "path": ["feed", "search"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "Create Comment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"string\",\n  \"userId\": \"string\",\n  \"postId\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{Base_Url}/comments",
+              "host": ["{{Base_Url}}"],
+              "path": ["comments"]
+            }
+          }
+        },
+        {
+          "name": "Delete Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/comments/:commentId",
+              "host": ["{{Base_Url}}"],
+              "path": ["comments", ":commentId"]
+            }
+          }
+        },
+        {
+          "name": "Mark Pin",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/comments/pin",
+              "host": ["{{Base_Url}}"],
+              "path": ["comments", "pin"]
+            }
+          }
+        },
+        {
+          "name": "Get Paginated Comments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{Base_Url}/comments",
+              "host": ["{{Base_Url}}"],
+              "path": ["comments"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Check Username Availability",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{Base_Url}/auth/check-username",
+              "host": ["{{Base_Url}}"],
+              "path": ["auth", "check-username"]
+            }
+          }
+        },
+        {
+          "name": "Sign In With Oauth",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"provider\": \"string\",\n  \"token\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{Base_Url}/auth/login",
+              "host": ["{{Base_Url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Sign Up With Oauth",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"provider\": \"string\",\n  \"token\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{Base_Url}/auth/register",
+              "host": ["{{Base_Url}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Sign Up With Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"string\",\n  \"password\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{Base_Url}/auth/email-register",
+              "host": ["{{Base_Url}}"],
+              "path": ["auth", "email-register"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{Base_Url}/auth/refresh-token",
+              "host": ["{{Base_Url}}"],
+              "path": ["auth", "refresh-token"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

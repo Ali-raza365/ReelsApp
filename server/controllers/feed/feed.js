@@ -6,6 +6,9 @@ const User = require("../../models/User");
 const { NotFoundError, BadRequestError } = require("../../errors");
 const jwt = require("jsonwebtoken");
 const Comment = require("../../models/Comment");
+const NodeCache = require("node-cache");
+
+const feedCache = new NodeCache({ stdTTL: 300 }); // 5 min TTL
 
 const getLikedVideos = async (req, res) => {
   const { limit = 10, offset = 0 } = req.query;
@@ -232,7 +235,7 @@ const markReelsWatched = async (req, res) => {
 };
 
 const getHomeFeed = async (req, res) => {
-  let { limit = 50, offset = 0 } = req.query;
+  let { limit = 50, offset = 0, type = "forYou" } = req.query;
   limit = parseInt(limit);
   offset = parseInt(offset);
 
@@ -298,25 +301,91 @@ const getHomeFeed = async (req, res) => {
         .exec();
     };
 
-    // Fetch reels from following
-    const reelsFromFollowing = await fetchReels({
-      user: { $in: following },
-      _id: { $nin: watchedReelIds },
-    });
+    if (type === "forYou") {
+      // fetch latest reels
+      const remainingLimit = limit + offset - totalReels;
+      const latestReels = await fetchReels(
+        {
+          _id: { $nin: watchedReelIds },
+        },
+        { limit: remainingLimit }
+      );
+      await addReelsToMap(latestReels);
 
-    await addReelsToMap(reelsFromFollowing);
+      // Fetch most liked reels
+      if (totalReels < limit + offset) {
+        const remainingLimit = limit + offset - totalReels;
+        const mostLikedReels = await Reel.aggregate([
+          { $match: { _id: { $nin: watchedReelIds } } },
+          {
+            $project: {
+              user: 1,
+              videoUri: 1,
+              thumbUri: 1,
+              caption: 1,
+              height: 1,
+              width: 1,
+              likesCount: { $size: "$likes" },
+              commentsCount: { $size: "$comments" },
+              createdAt: 1,
+            },
+          },
+          { $sort: { likesCount: -1, commentsCount: -1, createdAt: -1 } },
+          { $limit: remainingLimit },
+          {
+            $lookup: {
+              from: "users",
+              localField: "user",
+              foreignField: "_id",
+              as: "user",
+            },
+          },
+          { $unwind: "$user" },
+          {
+            $project: {
+              videoUri: 1,
+              thumbUri: 1,
+              caption: 1,
+              createdAt: 1,
+              likesCount: 1,
+              height: 1,
+              width: 1,
+              commentsCount: 1,
+              user: {
+                username: "$user.username",
+                name: "$user.name",
+                id: "$user._id",
+                userImage: "$user.userImage",
+              },
+            },
+          },
+        ]);
 
-    // Fetch most liked reels
-    if (totalReels < limit + offset) {
+        await addReelsToMap(mostLikedReels);
+      }
+
+      // Fetch reels from following
+      if (totalReels < limit + offset) {
+        const reelsFromFollowing = await fetchReels({
+          user: { $in: following },
+          _id: { $nin: watchedReelIds },
+        });
+        await addReelsToMap(reelsFromFollowing);
+      }
+    } else if (type === "popular") {
       const remainingLimit = limit + offset - totalReels;
       const mostLikedReels = await Reel.aggregate([
-        { $match: { _id: { $nin: watchedReelIds } } },
+        // { $match: { _id: { $nin: watchedReelIds } } },
         {
           $project: {
             user: 1,
             videoUri: 1,
             thumbUri: 1,
             caption: 1,
+            height: 1,
+            width: 1,
+            likes: 1,
+            comments: 1,
             likesCount: { $size: "$likes" },
             commentsCount: { $size: "$comments" },
             createdAt: 1,
@@ -340,6 +409,10 @@ const getHomeFeed = async (req, res) => {
             caption: 1,
             createdAt: 1,
             likesCount: 1,
+            height: 1,
+            width: 1,
+            likes: 1,
+            comments: 1,
             commentsCount: 1,
             user: {
               username: "$user.username",
@@ -350,21 +423,14 @@ const getHomeFeed = async (req, res) => {
           },
         },
       ]);
-
+      console.log({ mostLikedReels });
       await addReelsToMap(mostLikedReels);
-    }
-
-    // Fetch latest reels
-    if (totalReels < limit + offset) {
-      const remainingLimit = limit + offset - totalReels;
-      const latestReels = await fetchReels(
-        {
-          _id: { $nin: watchedReelIds },
-        },
-        { limit: remainingLimit }
-      );
-
-      await addReelsToMap(latestReels);
+    } else if (type === "following") {
+      const reelsFromFollowing = await fetchReels({
+        user: { $in: following },
+        _id: { $nin: watchedReelIds },
+      });
+      await addReelsToMap(reelsFromFollowing);
     }
 
     const uniqueReels = Array.from(uniqueReelsMap.values());
@@ -379,8 +445,8 @@ const getHomeFeed = async (req, res) => {
       thumbUri: reel.thumbUri,
       caption: reel.caption,
       createdAt: reel.createdAt,
-      width:reel?.width,
-      height:reel?.height,
+      width: reel?.width,
+      height: reel?.height,
       user: {
         _id: reel.user.id,
         username: reel.user.username,
@@ -392,8 +458,266 @@ const getHomeFeed = async (req, res) => {
       commentsCount: reel.commentsCount,
       isLiked: !!reel.isLiked,
     }));
-
+    // Cache the result
+    // feedCache.set(cacheKey, response);
     res.status(StatusCodes.OK).json({ reels: response });
+  } catch (error) {
+    console.error(error);
+    throw new BadRequestError(error.message);
+  }
+};
+
+const getReelsBySearch = async (req, res) => {
+  let { limit = 50, offset = 0, text } = req.query;
+  limit = parseInt(limit);
+  offset = parseInt(offset);
+
+  const accessToken = req.headers.authorization?.split(" ")[1];
+  const decodedToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+  const userId = decodedToken.userId;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new NotFoundError("User not found");
+  }
+
+  try {
+    const reels = await Reel.aggregate([
+      { $match: { caption: { $regex: text, $options: "i" } } },
+      {
+        $project: {
+          user: 1,
+          videoUri: 1,
+          thumbUri: 1,
+          caption: 1,
+          height: 1,
+          width: 1,
+          likes: 1,
+          comments: 1,
+          likesCount: { $size: "$likes" },
+          commentsCount: { $size: "$comments" },
+          createdAt: 1,
+          isLiked: {
+            $in: [userId, "$likes"],
+          },
+        },
+      },
+      { $sort: { createdAt: -1, likesCount: -1, comments: -1 } },
+      { $limit: limit },
+      { $skip: offset },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $project: {
+          videoUri: 1,
+          thumbUri: 1,
+          caption: 1,
+          createdAt: 1,
+          likesCount: 1,
+          height: 1,
+          width: 1,
+          likes: 1,
+          comments: 1,
+          isLiked: 1,
+          commentsCount: 1,
+          user: {
+            username: "$user.username",
+            name: "$user.name",
+            id: "$user._id",
+            userImage: "$user.userImage",
+          },
+        },
+      },
+    ]);
+    const uniqueReels = reels;
+
+    if (offset >= uniqueReels.length) {
+      return res.status(StatusCodes.OK).json({ reels: [] });
+    }
+
+    const response = uniqueReels.slice(offset, offset + limit).map((reel) => ({
+      _id: reel._id,
+      videoUri: reel.videoUri,
+      thumbUri: reel.thumbUri,
+      caption: reel.caption,
+      createdAt: reel.createdAt,
+      width: reel?.width,
+      height: reel?.height,
+      user: {
+        _id: reel.user.id,
+        username: reel.user.username,
+        name: reel.user.name,
+        userImage: reel.user.userImage,
+        isFollowing: user.following.includes(reel.user.id),
+      },
+      likesCount: reel.likesCount,
+      commentsCount: reel.commentsCount,
+      isLiked: !!reel.isLiked,
+    }));
+    res.status(StatusCodes.OK).json({ reels: response });
+  } catch (error) {
+    console.error(error);
+    throw new BadRequestError(error.message);
+  }
+};
+
+const getPopularFeed = async (req, res) => {
+  let { limit = 10, offset = 0 } = req.query;
+  limit = parseInt(limit);
+  offset = parseInt(offset);
+
+  const accessToken = req.headers.authorization?.split(" ")[1];
+  const decodedToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+  const userId = decodedToken.userId;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new NotFoundError("User not found");
+  }
+
+  try {
+    const reels = await Reel.aggregate([
+      {
+        $project: {
+          user: 1,
+          videoUri: 1,
+          thumbUri: 1,
+          caption: 1,
+          height: 1,
+          width: 1,
+          likesCount: { $size: "$likes" },
+          commentsCount: { $size: "$comments" },
+          createdAt: 1,
+          isLiked: {
+            $in: [userId, "$likes"],
+          },
+        },
+      },
+      { $sort: { likesCount: -1, commentsCount: -1, createdAt: -1 } },
+      { $limit: limit },
+      { $skip: offset },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $project: {
+          videoUri: 1,
+          thumbUri: 1,
+          caption: 1,
+          createdAt: 1,
+          likesCount: 1,
+          height: 1,
+          width: 1,
+          isLiked: 1,
+          commentsCount: 1,
+          user: {
+            username: "$user.username",
+            name: "$user.name",
+            id: "$user._id",
+            userImage: "$user.userImage",
+          },
+        },
+      },
+    ]);
+
+
+
+    res.status(StatusCodes.OK).json({ reels: reels });
+  } catch (error) {
+    console.error(error);
+    throw new BadRequestError(error.message);
+  }
+};
+
+const getFollowingFeed = async (req, res) => {
+  let { limit = 10, offset = 0 } = req.query;
+  limit = parseInt(limit);
+  offset = parseInt(offset);
+
+  const accessToken = req.headers.authorization?.split(" ")[1];
+  const decodedToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+  const userId = decodedToken.userId;
+
+  const user = await User.findById(userId).populate('following');
+  if (!user) {
+    throw new NotFoundError("User not found");
+  }
+
+  // Get the array of user IDs that the current user is following
+  const followingIds = user.following.map(followedUser => followedUser._id);
+
+  try {
+    const reels = await Reel.aggregate([
+      // Match only reels from followed users
+      {
+        $match: {
+          user: { $in: followingIds }
+        }
+      },
+      {
+        $project: {
+          user: 1,
+          videoUri: 1,
+          thumbUri: 1,
+          caption: 1,
+          height: 1,
+          width: 1,
+          likesCount: { $size: "$likes" },
+          commentsCount: { $size: "$comments" },
+          createdAt: 1,
+          isLiked: {
+            $in: [userId, "$likes"],
+          },
+        },
+      },
+      // Sort by creation date (most recent first)
+      { $sort: { createdAt: -1 } },
+      { $limit: limit },
+      { $skip: offset },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $project: {
+          videoUri: 1,
+          thumbUri: 1,
+          caption: 1,
+          createdAt: 1,
+          likesCount: 1,
+          height: 1,
+          width: 1,
+          isLiked: 1,
+          commentsCount: 1,
+          user: {
+            username: "$user.username",
+            name: "$user.name",
+            id: "$user._id",
+            userImage: "$user.userImage",
+          },
+        },
+      },
+    ]);
+
+    res.status(StatusCodes.OK).json({ reels: reels });
   } catch (error) {
     console.error(error);
     throw new BadRequestError(error.message);
@@ -406,4 +730,7 @@ module.exports = {
   getAllHistoryReels,
   markReelsWatched,
   getHomeFeed,
+  getReelsBySearch,
+  getPopularFeed,
+  getFollowingFeed
 };

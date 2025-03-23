@@ -17,12 +17,11 @@ import {Colors} from '../../constants/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface GlobalFeedCard {
-  style?: ViewStyle;
+  style: any;
   loading: boolean;
   item: any;
   onPressReel: () => void;
 }
-
 
 const GlobalFeedCard: FC<GlobalFeedCard> = ({
   style,
@@ -30,33 +29,35 @@ const GlobalFeedCard: FC<GlobalFeedCard> = ({
   item,
   loading,
 }) => {
-    console.log(item.height)
+
   return (
     <View style={[styles.card]}>
       {loading ? (
         <View></View>
-        // <ReelCardLoader style={styles.skeletonLoader} />
       ) : (
+        // <ReelCardLoader style={styles.skeletonLoader} />
         <TouchableOpacity style={styles.gridItem} onPress={onPressReel}>
           <FastImage
             source={{
               uri: item?.thumbUri,
               priority: FastImage.priority.high,
             }}
-            style={[{...styles.postImage},
-                {height:item?.height/3 ||180}
-            ]}
+            style={[styles.postImage, style]}
             resizeMode={FastImage.resizeMode.cover}
           />
           <View style={styles.postInfo}>
             <Text style={styles.postName}>{item.caption}</Text>
             <View style={styles.likesContainer}>
-              <Ionicons name="heart" size={16} color="#fff" />
+              <Ionicons
+                name="heart"
+                size={16}
+                color={item?.isLiked ? 'red' : '#fff'}
+              />
               <CustomText
                 variant="h8"
                 fontFamily={FONTS.SemiBold}
                 style={styles.likesCount}>
-                {item?.viewCount}
+                {item?.likesCount}
               </CustomText>
             </View>
           </View>
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    width: (screenWidth -15) /2 ,
+    width: (screenWidth - 15) / 2,
     backgroundColor: 'rgba(0,0,0,0.8)',
     justifyContent: 'center',
     alignItems: 'center',
@@ -90,9 +91,9 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   gridItem: {
-    width: (screenWidth) / 2,
+    width: screenWidth / 2,
     margin: 4,
-    flex:1,
+    flex: 1,
     // borderRadius: 8,
     overflow: 'hidden',
     backgroundColor: '#111',
@@ -102,6 +103,9 @@ const styles = StyleSheet.create({
     height: 180,
   },
   postInfo: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
     padding: 8,
   },
   postName: {

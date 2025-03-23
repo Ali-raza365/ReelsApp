@@ -134,7 +134,7 @@ const signUPWithEmail = async (req, res) => {
       "Email and password are required for email login"
     );
   }
-
+console.log({email,password})
   try {
     let user = await User.findOne({ email: email });
     if (user) {
@@ -175,7 +175,7 @@ const signUPWithEmail = async (req, res) => {
 
 const signInWithOauth = async (req, res) => {
   const { provider, id_token, email, password } = req.body;
-
+  console.log({provider, id_token, email, password})
   if (
     !provider ||
     !id_token ||
