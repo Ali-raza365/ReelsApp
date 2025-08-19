@@ -1,19 +1,19 @@
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import React, {FC} from 'react';
-import CustomSafeAreaView from '../../components/global/CustomSafeAreaView';
 import Lottie from 'lottie-react-native';
-import Animation from '../../assets/animations/login.json';
-import {RFValue} from 'react-native-responsive-fontsize';
+import React, { FC } from 'react';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {Colors} from '../../constants/Colors';
-import CustomText from '../../components/global/CustomText';
-import {FONTS} from '../../constants/Fonts';
-import SocialButtonHorizontal from '../../components/global/SocialButtonHorizontal';
+import { RFValue } from 'react-native-responsive-fontsize';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Animation from '../../assets/animations/login.json';
 import GoogleIcon from '../../assets/icons/google.png';
-import {useAppDispatch} from '../../redux/reduxHook';
-import {signInWithFacebook, signInWithGoogle} from '../../redux/SocialLogin';
-import {navigate, resetAndNavigate} from '../../utils/NavigationUtil';
+import CustomSafeAreaView from '../../components/global/CustomSafeAreaView';
+import CustomText from '../../components/global/CustomText';
+import SocialButtonHorizontal from '../../components/global/SocialButtonHorizontal';
+import { Colors } from '../../constants/Colors';
+import { FONTS } from '../../constants/Fonts';
+import { useAppDispatch } from '../../redux/reduxHook';
+import { signInWithFacebook, signInWithGoogle } from '../../redux/SocialLogin';
+import { navigate } from '../../utils/NavigationUtil';
 const LoginScreen: FC = () => {
   const dispatch = useAppDispatch();
 
@@ -27,8 +27,8 @@ const LoginScreen: FC = () => {
         <LinearGradient
           colors={[`rgba(0,0,0,0)`, Colors.text, `rgba(0,0,0,0)`]}
           style={styles.linearGradient}
-          start={{x: 0, y: 0.5}}
-          end={{x: 1, y: 0.5}}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
         />
         <CustomText variant="h2" fontFamily={FONTS.Reelz}>
           ReelVibe
@@ -36,8 +36,8 @@ const LoginScreen: FC = () => {
         <LinearGradient
           colors={[`rgba(0,0,0,0)`, Colors.text, `rgba(0,0,0,0)`]}
           style={styles.linearGradient}
-          start={{x: 0, y: 0.5}}
-          end={{x: 1, y: 0.5}}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
         />
       </View>
 
@@ -53,13 +53,13 @@ const LoginScreen: FC = () => {
         backgroundColor={Colors.white}
       />
 
-      {/* <SocialButtonHorizontal
+      <SocialButtonHorizontal
         icon={<Icon name="logo-facebook" size={20} color={Colors.text} />}
         onPress={async () => await dispatch(signInWithFacebook())}
         text="Continue with Facebook"
         textColor="#fff"
         backgroundColor={Colors.fbColor}
-      /> */}
+      />
 
       <SocialButtonHorizontal
         icon={<Image source={GoogleIcon} style={styles.gimg} />}

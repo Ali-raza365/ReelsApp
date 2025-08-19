@@ -1,4 +1,5 @@
-require("dotenv").config();
+require('dotenv').config();
+
 require("express-async-errors");
 
 const express = require("express");
@@ -41,6 +42,8 @@ app.use(errorHandlerMiddleware);
 // Start the server
 const start = async () => {
   try {
+  console.log('Mongo URI:', process.env.MONGO_URI);
+
     await connectDB(process.env.MONGO_URI);
     app.listen(process.env.PORT || 3000, () =>
       console.log(`HTTP server is running on port ${process.env.PORT || 3000}`)

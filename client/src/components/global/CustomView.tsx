@@ -1,5 +1,5 @@
 import {FC, ReactNode} from 'react';
-import {StyleSheet, View, ViewStyle} from 'react-native';
+import {StatusBar, StyleSheet, View, ViewStyle} from 'react-native';
 import {Colors} from '../../constants/Colors';
 
 interface CustomViewProps {
@@ -8,7 +8,13 @@ interface CustomViewProps {
 }
 
 const CustomView: FC<CustomViewProps> = ({children, style}) => {
-  return <View style={[styles.container, style]}>{children}</View>;
+  return <View style={[styles.container, style]}>
+    <StatusBar
+      barStyle="dark-content"
+      backgroundColor={Colors.background}
+    />
+    {children}
+    </View>;
 };
 
 const styles = StyleSheet.create({

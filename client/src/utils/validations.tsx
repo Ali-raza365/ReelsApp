@@ -48,6 +48,11 @@ export const validateForm = (formData: any) => {
     errors.password = 'Password must be at least 8 characters';
     isValid = false;
   }
+  // Password validation
+  if (!formData.confirmPassword) {
+    errors.confirmPassword = 'Confirm Password is required';
+    isValid = false;
+  } 
 
 if (formData.confirmPassword !== undefined) {
   if (formData.confirmPassword !== formData.password) {

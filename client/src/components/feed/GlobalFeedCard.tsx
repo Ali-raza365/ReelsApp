@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, { FC } from 'react';
 import {
   View,
   StyleSheet,
@@ -6,14 +6,14 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import {screenHeight, screenWidth} from '../../utils/Scaling';
+import { screenHeight, screenWidth } from '../../utils/Scaling';
 import ReelCardLoader from '../loader/ReelCardLoader';
 import FastImage from 'react-native-fast-image';
 import CustomText from '../global/CustomText';
-import {FONTS} from '../../constants/Fonts';
+import { FONTS } from '../../constants/Fonts';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {RFValue} from 'react-native-responsive-fontsize';
-import {Colors} from '../../constants/Colors';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { Colors } from '../../constants/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface GlobalFeedCard {
@@ -50,7 +50,7 @@ const GlobalFeedCard: FC<GlobalFeedCard> = ({
             <View style={styles.likesContainer}>
               <Ionicons
                 name="heart"
-                size={16}
+                size={20}
                 color={item?.isLiked ? 'red' : '#fff'}
               />
               <CustomText
@@ -78,11 +78,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    width: (screenWidth - 15) / 2,
-    backgroundColor: 'rgba(0,0,0,0.8)',
+    width: (screenWidth - 5) / 2,
+    height: '100%',
+    // // backgroundColor:Colors.secondary,
+    // backgroundColor: 'rgba(0,0,0,0.8)',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    // borderRadius: 10,
     overflow: 'hidden',
   },
   cardContent: {},
@@ -91,12 +93,13 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   gridItem: {
-    width: screenWidth / 2,
-    margin: 4,
+    width: '100%',
+    height: '100%',
+    marginTop: 3,
     flex: 1,
-    // borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: '#111',
+    backgroundColor: 'rgba(228, 219, 219, 0.8)',
+    // backgroundColor:Colors.fbColor,
   },
   postImage: {
     width: '100%',
@@ -104,13 +107,15 @@ const styles = StyleSheet.create({
   },
   postInfo: {
     position: 'absolute',
+    width: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
     bottom: 0,
-    left: 0,
+    left: 2,
     padding: 8,
   },
   postName: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 16,
     marginBottom: 4,
   },
   likesContainer: {
@@ -120,7 +125,7 @@ const styles = StyleSheet.create({
   likesCount: {
     color: '#fff',
     marginLeft: 4,
-    fontSize: 14,
+    fontSize: 16,
   },
 });
 

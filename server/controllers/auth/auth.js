@@ -41,13 +41,12 @@ const checkUsernameAvailability = async (req, res) => {
 const signUpWithOauth = async (req, res) => {
   const { provider, id_token, name, userImage, username, bio, email } =
     req.body;
-    
-    console.log({provider, id_token, name, userImage, username, bio, email})
+
   if (
     !provider ||
     !id_token ||
     !name ||
-    !userImage ||
+    // !userImage ||
     !username ||
     !bio ||
     !email ||
@@ -96,12 +95,12 @@ const signUpWithOauth = async (req, res) => {
       await user.save();
       const reward = new Reward({ user: user._id });
       await reward.save();
-    }else{
-      user.username=username
-      user.name=name
-      user.userImage=userImage
-      user.bio=bio
-      user.IsProfileCompleted=true
+    } else {
+      user.username = username
+      user.name = name
+      user.userImage = userImage
+      user.bio = bio
+      user.IsProfileCompleted = true
       await user.save();
     }
 
@@ -129,20 +128,29 @@ const signUpWithOauth = async (req, res) => {
 const signUPWithEmail = async (req, res) => {
   const { email, password } = req.body;
 
+  // User.updateMany({ username: null },
+  //   { $set: { username: "user" + Math.floor(Math.random() * 1000000) } }
+  // ).then((result) => {
+  //   console.log("Updated documents:", result);
+  // }).catch((error) => {
+  //   console.error("Error updating documents:", error);
+  // });
+
   if (!email || !password) {
     throw new BadRequestError(
       "Email and password are required for email login"
     );
   }
-console.log({email,password})
+
+  let user = await User.findOne({ email: email });
+  if (user) {
+    throw new NotFoundError("User Already Exist");
+  }
   try {
-    let user = await User.findOne({ email: email });
-    if (user) {
-      throw new NotFoundError("User Already Exist");
-    }
 
     if (!user) {
       const salt = await bcrypt.genSalt(10);
+      // Hash the password
       let hashpassword = await bcrypt.hash(password, salt);
       user = new User({
         email: email,
@@ -167,7 +175,6 @@ console.log({email,password})
       tokens: { access_token: accessToken, refresh_token: refreshToken },
     });
   } catch (error) {
-    console.log(error);
     console.error(error);
     throw new UnauthenticatedError("Invalid Token or expired");
   }
@@ -175,7 +182,6 @@ console.log({email,password})
 
 const signInWithOauth = async (req, res) => {
   const { provider, id_token, email, password } = req.body;
-  console.log({provider, id_token, email, password})
   if (
     !provider ||
     !id_token ||
@@ -213,13 +219,15 @@ const signInWithOauth = async (req, res) => {
       "-followers -following"
     );
 
+
+
     if (!user) {
       throw new NotFoundError("User does not exist");
     }
-
+    console.log({ user })
     // Handle email provider password verification
     if (provider === "email") {
-      const isPasswordValid = await bcrypt.compare(password, user.password);
+      const isPasswordValid = await bcrypt.compare(password, user?.password);
       if (!isPasswordValid) {
         return res
           .status(StatusCodes.UNAUTHORIZED)
@@ -250,7 +258,6 @@ const signInWithOauth = async (req, res) => {
       tokens: { access_token: accessToken, refresh_token: refreshToken },
     });
   } catch (error) {
-    console.log(error);
     console.error(error);
     throw new UnauthenticatedError("Invalid Token or expired");
   }

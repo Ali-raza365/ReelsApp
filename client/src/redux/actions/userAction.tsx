@@ -1,13 +1,14 @@
-import {token_storage} from '../storage';
-import {appAxios} from '../apiConfig';
-import {setUser} from '../reducers/userSlice';
-import {persistor} from '../store';
-import {navigate, resetAndNavigate} from '../../utils/NavigationUtil';
-import {CHECK_USERNAME, EMAIL_REGISTER, LOGIN, REGISTER} from '../API';
+import { token_storage } from '../storage';
+import { appAxios } from '../apiConfig';
+import { setUser } from '../reducers/userSlice';
+import { persistor } from '../store';
+import { navigate, resetAndNavigate } from '../../utils/NavigationUtil';
+import { CHECK_USERNAME, EMAIL_REGISTER, LOGIN, REGISTER } from '../API';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
-import {addFollowing} from '../reducers/followingSlice';
+import { addFollowing } from '../reducers/followingSlice';
 import { showErrorToast } from '../../utils/validations';
+import { handleServerError } from '../../utils/ErrorHandler';
 
 interface registerData {
   id_token: string;
@@ -34,20 +35,21 @@ export const checkUsernameAvailability =
       return res.data.available;
     } catch (error: any) {
       console.log('CHECK USERNAME ERROR ->', error);
-      return null;
+      return ;
     }
   };
 
 export const register = (data: registerData) => async (dispatch: any) => {
   try {
     const res = await axios.post(REGISTER, data);
+    console.log({res})
     token_storage.set('access_token', res.data.tokens.access_token);
     token_storage.set('refresh_token', res.data.tokens.refresh_token);
     await dispatch(setUser(res.data.user));
     resetAndNavigate('BottomTab');
   } catch (error: any) {
-    showErrorToast('There was an error, try again later')
-    console.log('REGISTER ERROR ->', error);
+     handleServerError(error);
+    console.log('REGISTER ERROR ->', {...error});
   }
 };
 
@@ -59,7 +61,7 @@ export const registerWithEmail = (data: registerData) => async (dispatch: any) =
     await dispatch(setUser(res.data.user));
     resetAndNavigate('BottomTab');
   } catch (error: any) {
-showErrorToast('There was an error, try again later')
+    handleServerError(error);
     console.log('REGISTER ERROR ->', error);
   }
 };
@@ -67,6 +69,8 @@ showErrorToast('There was an error, try again later')
 export const loginWithEmail = (data: loginData) => async (dispatch: any) => {
   try {
     const res = await axios.post(LOGIN, data);
+    console.log( 'LOGIN DATA ->', data);
+    console.log(res.data)
     token_storage.set('access_token', res.data.tokens.access_token);
     token_storage.set('refresh_token', res.data.tokens.refresh_token);
     if (!res?.data?.user?.IsProfileCompleted) {
@@ -78,7 +82,7 @@ export const loginWithEmail = (data: loginData) => async (dispatch: any) => {
     await dispatch(setUser(res.data.user));
     resetAndNavigate('BottomTab');
   } catch (error: any) {
-    showErrorToast('There was an error, try again later')
+    handleServerError(error);
     console.log('EMAIL LOGIN ERROR ->', error);
   }
 };
@@ -97,7 +101,7 @@ export const rigisterWithEmail = (data: any) => async (dispatch: any) => {
     await dispatch(setUser(res.data.user));
     resetAndNavigate('BottomTab');
   } catch (error: any) {
-    showErrorToast('There was an error, try again later')
+    handleServerError(error);
     console.log('EMAIL REGISTER WITH EMAIL ERROR ->', error);
   }
 };
@@ -114,6 +118,7 @@ export const refetchUser = () => async (dispatch: any) => {
       return;
     }
   } catch (error: any) {
+    handleServerError(error);
     console.log('PROFILE ->', error);
   }
 };
@@ -173,8 +178,7 @@ export const getFollowOrFollowingUsers =
   (data: any, search: string, offset: number) => async (dispatch: any) => {
     try {
       const res = await appAxios.get(
-        `/user/${data?.type.toLowerCase()}/${
-          data?.userId
+        `/user/${data?.type.toLowerCase()}/${data?.userId
         }?searchText=${search}&limit=5&offset=${offset}`,
       );
 

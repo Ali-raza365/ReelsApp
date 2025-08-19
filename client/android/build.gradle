@@ -27,7 +27,7 @@ allprojects {
     repositories {
         mavenLocal()
         google()
-        jcenter()
+        // jcenter()
          maven {
             url "$rootDir/../node_modules/react-native-video-cache/android/libs"
         }

@@ -9,13 +9,13 @@ import {
   PermissionsAndroid,
   TextInput,
 } from 'react-native';
-import React, {FC, useEffect, useState} from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import CustomSafeAreaView from '../../components/global/CustomSafeAreaView';
-import {Colors} from '../../constants/Colors';
-import {FONTS} from '../../constants/Fonts';
-import {Platform} from 'react-native';
-import {StyleSheet} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { Colors } from '../../constants/Colors';
+import { FONTS } from '../../constants/Fonts';
+import { Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomText from '../../components/global/CustomText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -24,12 +24,13 @@ import {
   checkUsernameAvailability,
   register,
 } from '../../redux/actions/userAction';
-import {useRoute} from '@react-navigation/native';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-import {RFValue} from 'react-native-responsive-fontsize';
-import {uploadFile} from '../../redux/actions/fileAction';
+import { useRoute } from '@react-navigation/native';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { uploadFile } from '../../redux/actions/fileAction';
 import GradientButton from '../../components/global/GradientButton';
-import {useAppDispatch} from '../../redux/reduxHook';
+import { useAppDispatch } from '../../redux/reduxHook';
+import { showErrorToast } from '../../utils/validations';
 interface initialData {
   id_token: string;
   provider: string;
@@ -44,8 +45,7 @@ const RegisterScreen: FC = () => {
   const item = data?.params as initialData;
   const [username, setUsername] = useState<string>('');
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(
-    null,
-  );
+    null);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingMessage, setLoadingMessage] = useState<string>('');
   const [isLocalImagePickedUp, setIsLocalImagePickedUp] =
@@ -55,14 +55,16 @@ const RegisterScreen: FC = () => {
   const [imageUri, setImageUri] = useState<string>('');
 
   useEffect(() => {
-    if (item) {
-      setFullName(item.name);
-      setImageUri(item.userImage);
+    console.log({item})
+    if (item?.name) {
+      setFullName(item?.name);
+      setImageUri(item?.userImage);
     }
   }, [item]);
 
   const checkUsername = async () => {
     const data = await dispatch(checkUsernameAvailability(username));
+    // console.log({data})
     setUsernameAvailable(data);
   };
 
@@ -128,49 +130,72 @@ const RegisterScreen: FC = () => {
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
-    setLoadingMessage('Creating Account...🚀');
-    const trimmedUsername = username.trim().toLowerCase();
-    const trimmedFullName = fullName.trim();
-    const trimmedBio = bio.trim();
+    try {
 
-    if (
-      !trimmedUsername ||
-      !trimmedFullName ||
-      !trimmedBio ||
-      !usernameAvailable
-    ) {
-      Alert.alert('Please fill valid details');
-      setLoading(false);
-      setLoadingMessage('');
-      return;
-    }
 
-    let userImage = imageUri;
-    if (isLocalImagePickedUp) {
-      setLoadingMessage('Uploading Image...📦🎞️');
-      const uploadResult = await dispatch(uploadFile(imageUri, 'user_image'));
-      if (uploadResult) {
-        userImage = uploadResult;
-        setLoadingMessage('Image Uploaded...✅');
-      } else {
-        setLoading(false);
-        setLoadingMessage('');
+
+      // if (!usernameAvailable) {
+      //   showErrorToast('Username is not available');
+      //   setLoading(false);
+      //   setLoadingMessage('');
+      //   return;
+      // }
+      // console.log({ username, fullName, bio });
+      const trimmedUsername = username?.trim()?.toLowerCase();
+      const trimmedFullName = fullName?.trim();
+      const trimmedBio = bio?.trim();
+
+      if (!username) {
+        showErrorToast('Username is required');
+        return;
+      } else if (!usernameAvailable) {
+        showErrorToast('Username is not available');
         return;
       }
+      else if (!trimmedFullName) {
+        showErrorToast('Full Name is required');
+        return;
+      } else if (!trimmedBio) {
+        showErrorToast('Bio is required');
+        return;
+      } else if (!imageUri) {
+        showErrorToast('Profile image is required');
+        return;
+      }
+      setLoading(true);
+      setLoadingMessage('Creating Account...🚀');
+      let userImage = imageUri;
+      if (isLocalImagePickedUp) {
+        setLoadingMessage('Uploading Image...📦🎞️');
+        const uploadResult = await dispatch(uploadFile(imageUri, 'user_image'));
+        if (uploadResult) {
+          userImage = uploadResult;
+          setLoadingMessage('Image Uploaded...✅');
+        } else {
+          setLoading(false);
+          setLoadingMessage('');
+          return;
+        }
+      }
+      setLoadingMessage('Preparing Dashboard...✨✨');
+      const registerData = {
+        name: fullName,
+        bio,
+        userImage,
+        email: item?.email,
+        provider: item?.provider || 'email',
+        id_token: item?.id_token || "email",
+        username: trimmedUsername || `user${Math.floor(Math.random() * 1000000)}`,
+      };
+      console.log({ registerData });
+      await dispatch(register(registerData));
+      setLoading(false);
+    } catch (error) {
+      showErrorToast('Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
+      setLoadingMessage('');
     }
-    setLoadingMessage('Preparing Dashboard...✨✨');
-    const registerData = {
-      name: fullName,
-      bio,
-      userImage,
-      email: item?.email,
-      provider: item?.provider ||'email',
-      id_token: item?.id_token|| "email",
-      username,
-    };
-    await dispatch(register(registerData));
-    setLoading(false);
   };
 
   return (
@@ -189,8 +214,8 @@ const RegisterScreen: FC = () => {
           <LinearGradient
             colors={['rgba(0, 0, 0, 0)', Colors.text, 'rgba(0, 0, 0, 0)']}
             style={styles.linearGradient}
-            start={{x: 0, y: 0.5}}
-            end={{x: 1, y: 0.5}}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
           />
           <CustomText variant="h4" fontFamily={FONTS.Reelz}>
             Complete your profile
@@ -198,8 +223,8 @@ const RegisterScreen: FC = () => {
           <LinearGradient
             colors={['rgba(0, 0, 0, 0)', Colors.text, 'rgba(0, 0, 0, 0)']}
             style={styles.linearGradient}
-            start={{x: 0, y: 0.5}}
-            end={{x: 1, y: 0.5}}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
           />
         </View>
 
@@ -209,7 +234,7 @@ const RegisterScreen: FC = () => {
           <Image
             source={
               imageUri
-                ? {uri: imageUri}
+                ? { uri: imageUri }
                 : require('../../assets/images/placeholder.png')
             }
             style={styles.image}
@@ -231,7 +256,7 @@ const RegisterScreen: FC = () => {
             <CustomText
               variant="h8"
               fontFamily={FONTS.SemiBold}
-              style={[styles.label, {alignSelf: 'flex-end'}]}>
+              style={[styles.label, { alignSelf: 'flex-end' }]}>
               {usernameAvailable ? '✅ Available' : '❌ Not Available'}
             </CustomText>
           )}

@@ -89,7 +89,9 @@ const ReelScrollScreen: FC = () => {
         showsVerticalScrollIndicator={false}
         initialNumToRender={1}
         scrollEventThrottle={16}
-        decelerationRate={'normal'}
+        decelerationRate={'fast'}
+        snapToInterval={screenHeight}
+        snapToAlignment="start"
         maxToRenderPerBatch={2}
         removeClippedSubviews={true}
         getItemLayout={getItemLayout}

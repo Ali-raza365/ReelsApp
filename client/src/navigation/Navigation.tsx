@@ -17,7 +17,9 @@ const linking = {
 
 const Navigation: React.FC = () => {
   return (
-    <NavigationContainer linking={linking} ref={navigationRef}>
+    <NavigationContainer 
+    // linking={linking}
+     ref={navigationRef}>
       <MainNavigator />
     </NavigationContainer>
   );

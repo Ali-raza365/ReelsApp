@@ -87,6 +87,8 @@ const GlobalFeed: React.FC<{
     } else if (type === 'Search' && query) {
       newData = await dispatch(fetchSearchReel(offset, 5, query));
     }
+    console.log(newData)
+    // return 
     if (isRefresh) {
       setData([...newData]);
       setOffset(0);
@@ -106,10 +108,10 @@ const GlobalFeed: React.FC<{
     fetchReels(0, false);
   }, []);
 
-  useEffect(() => {
-    fetchReels(0, false);
-    console.log("first")
-  }, [query]);
+  // useEffect(() => {
+  //   fetchReels(0, false);
+  //   console.log("first")
+  // }, [query]);
 
   return (
     <View style={{width: screenWidth, height: screenHeight}}>

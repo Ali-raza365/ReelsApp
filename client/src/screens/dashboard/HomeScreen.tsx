@@ -1,24 +1,20 @@
-import React, {FC, useRef, useState} from 'react';
-import CustomView from '../../components/global/CustomView';
-import CustomGradient from '../../components/global/CustomGradient';
-import GlobalFeed from '../../components/feed/GlobalFeed';
-import CustomText from '../../components/global/CustomText';
-import {useAppSelector} from '../../redux/reduxHook';
+import React, { FC, useRef, useState } from 'react';
 import {
   CollapsibleRef,
   MaterialTabBar,
   Tabs,
 } from 'react-native-collapsible-tab-view';
-import {selectUser} from '../../redux/reducers/userSlice';
-import ReelListTab from '../../components/profile/ReelListTab';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import GlobalFeed from '../../components/feed/GlobalFeed';
+import CustomGradient from '../../components/global/CustomGradient';
+import CustomText from '../../components/global/CustomText';
+import CustomView from '../../components/global/CustomView';
+import { selectUser } from '../../redux/reducers/userSlice';
+import { useAppSelector } from '../../redux/reduxHook';
 
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Image} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import {RFValue} from 'react-native-responsive-fontsize';
-import {Colors} from '../../constants/Colors';
-import {FONTS} from '../../constants/Fonts';
+import { Image, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Colors } from '../../constants/Colors';
+import { FONTS } from '../../constants/Fonts';
 import { navigate } from '../../utils/NavigationUtil';
 
 const HomeScreen: FC = () => {
@@ -52,7 +48,7 @@ const HomeScreen: FC = () => {
     <>
       <View style={styles.header}>
         <View style={styles.userInfo}>
-          <Image source={{uri: user.userImage}} style={styles.avatar} />
+          <Image source={{ uri: user.userImage }} style={styles.avatar} />
           <CustomText
             variant="h7"
             fontFamily={FONTS.Medium}
@@ -60,23 +56,27 @@ const HomeScreen: FC = () => {
             {user?.username}
           </CustomText>
         </View>
-        <TouchableOpacity style={styles.searchButton} onPress={()=>{navigate('SearchReelsScreen')}}>
-          <Ionicons  name="search" size={24} color="#fff" />
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity style={styles.searchButton} onPress={() => { }}>
+          <Ionicons name="notifications" size={22} color="#fff" />
         </TouchableOpacity>
+        <TouchableOpacity style={styles.searchButton} onPress={() => { navigate('SearchReelsScreen') }}>
+          <Ionicons name="search" size={22} color="#fff" />
+        </TouchableOpacity>
+        </View>
       </View>
     </>
   );
 
   return (
-    <CustomView>
+    <CustomView style={{ overflow: 'hidden' }}>
       <CustomGradient position="top" />
+      <RenderHeader />
       <Tabs.Container
         lazy
-        cancelLazyFadeIn
+        cancelLazyFadeIn={true}
         ref={containerRef}
-        revealHeaderOnScroll={true}
-        renderHeader={() => <RenderHeader />}
-        headerContainerStyle={styles.noOpacity}
+        revealHeaderOnScroll={false}
         pagerProps={{
           onPageSelected: event => {
             setFocusedIndex(event.nativeEvent.position);
@@ -97,7 +97,7 @@ const HomeScreen: FC = () => {
               borderColor: Colors.background,
             }}
             indicatorStyle={styles.indicatorStyle}
-            TabItemComponent={({index, name, ...rest}) => (
+            TabItemComponent={({ index, name, ...rest }) => (
               <TouchableOpacity
                 key={index}
                 style={styles.tabBar}
@@ -118,12 +118,16 @@ const HomeScreen: FC = () => {
           backgroundColor: Colors.background,
           paddingVertical: 0,
           elevation: 0,
-          shadowOffset: {height: 0, width: 0},
+          shadowOffset: { height: 0, width: 0 },
           shadowColor: 'transparent',
           shadowOpacity: 0,
-        }}>
+
+        }}
+      // renderHeader={}
+      >
         {MyTabs.map((item, index) => (
-          <Tabs.Tab key={index} name={item.name}>
+          <Tabs.Tab
+            key={index} name={item.name}>
             {item.component}
           </Tabs.Tab>
         ))}
@@ -138,26 +142,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
-    paddingVertical: 7,
+    paddingHorizontal: 14,
+    marginTop: Platform.OS === 'ios'   ?80: 20,
+    // height:40,
+    // padding: 10,
+    // paddingVertical: 7,
+    // paddingBottom: 0,
     backgroundColor: Colors.background,
     borderBottomColor: Colors.border,
     borderBottomWidth: 0.5,
+    // backgroundColor:Colors.fbColor,
   },
   userInfo: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   avatar: {
-    width: 35,
-    height: 35,
+    width: 25,
+    height: 25,
     borderRadius: 20,
-    marginRight: 12,
+    marginRight: 10,
+    backgroundColor: Colors.secondary,
   },
   username: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
+    lineHeight: 22,
   },
   searchButton: {
     padding: 8,
@@ -169,14 +180,16 @@ const styles = StyleSheet.create({
   noOpacity: {
     shadowOpacity: 0,
     elevation: 0,
-
     borderWidth: 0,
+    overflow: 'hidden',
+    backgroundColor: Colors.background
   },
   tabBar: {
-    width: '50%',
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 8,
+    paddingTop: 0,
   },
   activeText: {
     color: Colors.text,

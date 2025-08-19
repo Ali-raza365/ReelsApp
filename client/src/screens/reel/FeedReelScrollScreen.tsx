@@ -82,7 +82,7 @@ console.log(routeParams)
       if (loading || !hasMore) return;
       setLoading(true);
       try {
-        const newData = await dispatch(fetchFeedReel(offset, 8));
+        const newData = await dispatch(fetchFeedReel(offset, 8,));
         setOffset(offset + 8);
         if (newData?.length < 8) {
           setHasMore(false);
@@ -151,6 +151,8 @@ console.log(routeParams)
           ) : null
         }
         decelerationRate={'normal'}
+        snapToInterval={screenHeight}
+        snapToAlignment="start"
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
       />

@@ -1,8 +1,8 @@
 import axios from 'axios';
-import {BASE_URL, REFRESH_TOKEN} from './API';
-import {token_storage} from './storage';
-import {Alert} from 'react-native';
-import {resetAndNavigate} from '../utils/NavigationUtil';
+import { BASE_URL, REFRESH_TOKEN } from './API';
+import { token_storage } from './storage';
+import { Alert } from 'react-native';
+import { resetAndNavigate } from '../utils/NavigationUtil';
 
 export const appAxios = axios.create({
   baseURL: BASE_URL,

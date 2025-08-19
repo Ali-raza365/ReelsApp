@@ -1,4 +1,4 @@
-import {View, Text, ViewStyle} from 'react-native';
+import {View, Text, ViewStyle, StatusBar} from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -43,10 +43,14 @@ const CustomGradient: React.FC<CustomGradientProps> = ({
   };
 
   return (
+    <>
+    <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
     <LinearGradient
       colors={position === 'top' ? darkColors : bottomColors}
       style={[gradientStyle, style]}
     />
+    </>
+
   );
 };
 
