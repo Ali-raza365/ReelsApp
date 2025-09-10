@@ -1,0 +1,9 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "npm ci"
+
+[deploy]
+startCommand = "node index.js"
+healthcheckPath = "/"
+healthcheckTimeout = 60
+restartPolicyType = "always"
