@@ -56,13 +56,13 @@ const HomeScreen: FC = () => {
             {user?.username}
           </CustomText>
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity style={styles.searchButton} onPress={() => { }}>
-          <Ionicons name="notifications" size={22} color="#fff" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.searchButton} onPress={() => { navigate('SearchReelsScreen') }}>
-          <Ionicons name="search" size={22} color="#fff" />
-        </TouchableOpacity>
+            <Ionicons name="notifications" size={22} color="#fff" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.searchButton} onPress={() => { navigate('SearchReelsScreen') }}>
+            <Ionicons name="search" size={22} color="#fff" />
+          </TouchableOpacity>
         </View>
       </View>
     </>
@@ -71,6 +71,7 @@ const HomeScreen: FC = () => {
   return (
     <CustomView style={{ overflow: 'hidden' }}>
       <CustomGradient position="top" />
+      
       <RenderHeader />
       <Tabs.Container
         lazy
@@ -92,6 +93,7 @@ const HomeScreen: FC = () => {
               backgroundColor: Colors.background,
             }}
             style={{
+              paddingTop: 10,
               backgroundColor: Colors.background,
               borderTopWidth: 1,
               borderColor: Colors.background,
@@ -123,7 +125,7 @@ const HomeScreen: FC = () => {
           shadowOpacity: 0,
 
         }}
-      // renderHeader={}
+      // renderHeader={RenderHeader}
       >
         {MyTabs.map((item, index) => (
           <Tabs.Tab
@@ -143,10 +145,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 14,
-    marginTop: Platform.OS === 'ios'   ?80: 20,
+    marginTop: Platform.OS === 'ios' ? 80 : 20,
     // height:40,
     // padding: 10,
-    // paddingVertical: 7,
+    paddingVertical: 7,
     // paddingBottom: 0,
     backgroundColor: Colors.background,
     borderBottomColor: Colors.border,

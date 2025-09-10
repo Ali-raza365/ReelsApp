@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import {
   Platform,
+  SafeAreaView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -22,6 +23,7 @@ const SearchReelsScreen: FC = () => {
   const [search, setSearch] = useState('');
 
   return (
+    <SafeAreaView style={{flex: 1,backgroundColor: Colors.background}}>
     <CustomView>
       <CustomGradient position="top" />
       <View
@@ -74,6 +76,7 @@ const SearchReelsScreen: FC = () => {
         </Tabs.Tab>
       </Tabs.Container>
     </CustomView>
+    </SafeAreaView>
   );
 };
 

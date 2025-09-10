@@ -8,34 +8,34 @@ import {
   TextInput,
   // CheckBox
 } from 'react-native';
-import React, {FC, useState} from 'react';
+import React, { FC, useState } from 'react';
 import CustomSafeAreaView from '../../components/global/CustomSafeAreaView';
 import Lottie from 'lottie-react-native';
 import Animation from '../../assets/animations/login.json';
-import {RFValue} from 'react-native-responsive-fontsize';
+import { RFValue } from 'react-native-responsive-fontsize';
 import LinearGradient from 'react-native-linear-gradient';
-import {Colors} from '../../constants/Colors';
+import { Colors } from '../../constants/Colors';
 import CustomText from '../../components/global/CustomText';
-import {FONTS} from '../../constants/Fonts';
+import { FONTS } from '../../constants/Fonts';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CustomInput from '../../components/global/CustomInput';
 import CustomButton from '../../components/global/CustomButton';
-import {screenWidth} from '../../utils/Scaling';
-import {loginWithEmail} from '../../redux/actions/userAction';
-import {useAppDispatch} from '../../redux/reduxHook';
-import {navigate} from '../../utils/NavigationUtil';
-import {validateForm} from '../../utils/validations';
+import { screenWidth } from '../../utils/Scaling';
+import { loginWithEmail } from '../../redux/actions/userAction';
+import { useAppDispatch } from '../../redux/reduxHook';
+import { navigate } from '../../utils/NavigationUtil';
+import { validateForm } from '../../utils/validations';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const EmailLoginScreen: FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('ali@gmail.com');
+  const [password, setPassword] = useState('12345678');
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
   const onLogin = async () => {
-    let {isValid} = validateForm({email, password});
+    let { isValid } = validateForm({ email, password });
     if (!isValid) return;
 
     setLoading(true);
@@ -57,16 +57,16 @@ const EmailLoginScreen: FC = () => {
 
   return (
     <CustomSafeAreaView>
-    <KeyboardAwareScrollView
-      contentContainerStyle={styles.scrollViewContainer}
-      scrollEnabled={true}
-      showsVerticalScrollIndicator={false}
-      enableOnAndroid={true}
-      enableAutomaticScroll={true}
-      extraScrollHeight={Platform.select({
-        ios: 120,
-        android: 40,
-      })}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.scrollViewContainer}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+        extraScrollHeight={Platform.select({
+          ios: 120,
+          android: 40,
+        })}>
         <View style={styles.lottieContainer}>
           <Lottie source={Animation} autoPlay loop style={styles.lottie} />
         </View>
@@ -75,8 +75,8 @@ const EmailLoginScreen: FC = () => {
           <LinearGradient
             colors={['rgba(0,0,0,0)', Colors.text, 'rgba(0,0,0,0)']}
             style={styles.linearGradient}
-            start={{x: 0, y: 0.5}}
-            end={{x: 1, y: 0.5}}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
           />
           <CustomText variant="h2" fontFamily={FONTS.Reelz}>
             Login
@@ -84,8 +84,8 @@ const EmailLoginScreen: FC = () => {
           <LinearGradient
             colors={['rgba(0,0,0,0)', Colors.text, 'rgba(0,0,0,0)']}
             style={styles.linearGradient}
-            start={{x: 0, y: 0.5}}
-            end={{x: 1, y: 0.5}}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
           />
         </View>
 
