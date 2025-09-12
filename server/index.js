@@ -35,6 +35,11 @@ app.use("/reel", authMiddleware, reelRouter);
 app.use("/reward", authMiddleware, rewardRouter);
 app.use("/feed", authMiddleware, feedRouter);
 
+
+app.use('/',(req, res)=>{
+  res.send('server starting')
+})
+
 // Middleware
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
