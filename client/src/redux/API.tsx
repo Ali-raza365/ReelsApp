@@ -6,7 +6,7 @@ export const BASE_URL =
   Platform.OS === 'android'
     // ? 'http://10.0.2.2:3000'
     // : 'http://127.0.0.1:3000';
-    ? 'http://192.168.100.132:3000'
+    ? 'https://reelsapp-production-011d.up.railway.app'
     : 'http://192.168.100.132:3000';
 
 // RUNNING ON REAL DEVICE USE YOUR NETWORK IP TO ACCESS ON REAL DEVICE
