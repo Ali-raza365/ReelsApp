@@ -45,7 +45,7 @@ const start = async () => {
   console.log('Mongo URI:', process.env.MONGO_URI);
 
     await connectDB(process.env.MONGO_URI);
-    app.listen(process.env.PORT ||'0.0.0.0', () =>
+    app.listen(process.env.PORT || 8080, '0.0.0.0', () =>
       console.log(`HTTP server is running on port ${process.env.PORT || 3000}`)
     );
   } catch (error) {
